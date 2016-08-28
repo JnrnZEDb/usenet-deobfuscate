@@ -35,6 +35,37 @@ class Deobfuscator(obfuscated: List<String>, val suffixes: List<String> = listOf
         }
     }
 
+    fun rename() {
+        deobfuscated.filter { it.value != null }.forEach {
+            val info = it.value as DeobfuscationResult
+
+            val originalFolder = File(info.originalFolder)
+            // new file temporary sits in new folder
+            val newFileLocation = originalFolder.resolve(File(info.newFile).name)
+
+            var result = File(info.originalFile).renameTo(newFileLocation)
+            logRename(result, info.originalFile, info.newFile)
+
+            if (result) {
+                result = File(info.originalFolder).renameTo(File(info.newFolder))
+                logRename(result, info.originalFolder, info.newFolder)
+            }
+
+            if(result)
+                println("Successfully deobfuscated ${it.key}")
+            else
+                println("Could not deobfuscate ${it.key}")
+
+        }
+    }
+
+    private fun logRename(result: Boolean, from: String, to: String) {
+        if (result)
+            println("Renamed $from to $to")
+        else
+            println("Could not rename $from to $to")
+    }
+
     class DeobfuscationResult(val originalFolder: String, val originalFile: String,
                               val newFolder: String, val newFile: String)
 }

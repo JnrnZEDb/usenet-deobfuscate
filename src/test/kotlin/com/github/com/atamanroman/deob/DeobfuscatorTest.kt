@@ -1,8 +1,12 @@
 package com.github.com.atamanroman.deob
 
 import io.kotlintest.KTestJUnitRunner
+import io.kotlintest.matchers.be
 import io.kotlintest.specs.FlatSpec
 import org.junit.runner.RunWith
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
 
 @RunWith(KTestJUnitRunner::class)
 class DeobfuscatorTest : FlatSpec() {
@@ -21,5 +25,26 @@ class DeobfuscatorTest : FlatSpec() {
             entry.newFile shouldBe "${testfolder.replaceFirst("-OBFUSCATED", "")}/baz.txt"
             entry.newFolder shouldBe "${testfolder.replaceFirst("-OBFUSCATED", "")}"
         }
+
+        "Deobfuscator" should "rename a single folder successfully" {
+            val target = prepare()
+            val cut = Deobfuscator(listOf(target.toString()))
+            cut.deobfuscated.size shouldBe 1
+            cut.deobfuscated.entries.first().value should { it != null }
+
+            cut.rename()
+
+            cleanup(target)
+        }
+    }
+
+    private fun cleanup(target: Path) {
+        target.toFile().deleteRecursively()
+    }
+
+    private fun prepare(): Path {
+        val tmp = Files.createTempDirectory("deob-test")
+        File(testfolder).parentFile.copyRecursively(tmp.toFile())
+        return tmp.resolve("baz-OBFUSCATED")
     }
 }
