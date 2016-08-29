@@ -1,4 +1,4 @@
-package com.github.com.atamanroman.deob
+package com.github.atamanroman.deob
 
 
 fun main(args: Array<String>) {

@@ -1,4 +1,4 @@
-package com.github.com.atamanroman.deob
+package com.github.atamanroman.deob
 
 class ObfuscationDetector(targets: List<String>, val suffixes: List<String> = listOf("OBFUSCATED")) {
 
