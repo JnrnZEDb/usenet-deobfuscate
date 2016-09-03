@@ -4,7 +4,7 @@ import java.io.File
 import java.nio.file.Paths
 import java.util.*
 
-class Deobfuscator(obfuscated: List<String>, val suffixes: List<String> = listOf("OBFUSCATED")) {
+class Deobfuscator(obfuscated: List<String>, val dryRun: Boolean = true, val suffixes: List<String> = listOf("OBFUSCATED")) {
 
     var deobfuscated: Map<String, DeobfuscationResult?>
 
@@ -43,27 +43,27 @@ class Deobfuscator(obfuscated: List<String>, val suffixes: List<String> = listOf
             // new file temporary sits in new folder
             val newFileLocation = originalFolder.resolve(File(info.newFile).name)
 
-            var result = File(info.originalFile).renameTo(newFileLocation)
+            var result = dryRun || File(info.originalFile).renameTo(newFileLocation)
             logRename(result, info.originalFile, info.newFile)
 
             if (result) {
-                result = File(info.originalFolder).renameTo(File(info.newFolder))
+                result = dryRun || File(info.originalFolder).renameTo(File(info.newFolder))
                 logRename(result, info.originalFolder, info.newFolder)
             }
 
-            if(result)
-                println("Successfully deobfuscated ${it.key}")
+            if (result)
+                println("Successfully deobfuscated ${it.key}${if (dryRun) "(dry-run)" else ""}")
             else
-                println("Could not deobfuscate ${it.key}")
+                error("Could not deobfuscate ${it.key}${if (dryRun) "(dry-run)" else ""}")
 
         }
     }
 
     private fun logRename(result: Boolean, from: String, to: String) {
         if (result)
-            println("Renamed $from to $to")
+            println("Renamed $from to $to${if (dryRun) "(dry-run)" else ""}")
         else
-            println("Could not rename $from to $to")
+            error("Could not rename $from to $to${if (dryRun) "(dry-run)" else ""}")
     }
 
     class DeobfuscationResult(val originalFolder: String, val originalFile: String,

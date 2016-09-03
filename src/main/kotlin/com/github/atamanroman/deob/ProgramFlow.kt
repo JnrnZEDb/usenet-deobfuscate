@@ -2,7 +2,7 @@ package com.github.atamanroman.deob
 
 import java.io.File
 
-class ProgramFlow(val root: String) {
+class ProgramFlow(val root: String, val dryRun: Boolean) {
 
     var folders: List<String> = emptyList()
     var detected: List<String> = emptyList()
@@ -10,6 +10,12 @@ class ProgramFlow(val root: String) {
     fun go() {
         findFolders()
         findObfuscated()
+        rename()
+    }
+
+    private fun rename() {
+        val deobfuscator = Deobfuscator(detected, dryRun)
+        deobfuscator.rename()
     }
 
     private fun findFolders(): List<String> {
