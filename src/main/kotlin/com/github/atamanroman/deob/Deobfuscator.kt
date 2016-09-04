@@ -52,18 +52,18 @@ class Deobfuscator(obfuscated: List<String>, val dryRun: Boolean = true, val suf
             }
 
             if (result)
-                println("Successfully deobfuscated ${it.key}${if (dryRun) "(dry-run)" else ""}")
+                println("Successfully deobfuscated ${it.key}${if (dryRun) " (dry-run)" else ""}")
             else
-                error("Could not deobfuscate ${it.key}${if (dryRun) "(dry-run)" else ""}")
+                error("Could not deobfuscate ${it.key}${if (dryRun) " (dry-run)" else ""}")
 
         }
     }
 
     private fun logRename(result: Boolean, from: String, to: String) {
         if (result)
-            println("Renamed $from to $to${if (dryRun) "(dry-run)" else ""}")
+            println("Renamed $from to $to${if (dryRun) " (dry-run)" else ""}")
         else
-            error("Could not rename $from to $to${if (dryRun) "(dry-run)" else ""}")
+            error("Could not rename $from to $to${if (dryRun) " (dry-run)" else ""}")
     }
 
     class DeobfuscationResult(val originalFolder: String, val originalFile: String,

@@ -1,7 +1,6 @@
 package com.github.atamanroman.deob
 
 import io.kotlintest.KTestJUnitRunner
-import io.kotlintest.matchers.be
 import io.kotlintest.specs.FlatSpec
 import org.junit.runner.RunWith
 import java.io.File
